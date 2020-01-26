@@ -1,0 +1,37 @@
+{
+  "name": "luon",
+  "version": "1.0.0",
+  "esversion": 6,
+  "description": "A lightweight Lua Object Notation (Luon) implementation",
+  "main": "./index.js",
+  "scripts": {
+    "test": "./test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appgurueu/luon.git"
+  },
+  "keywords": [
+    "lua",
+    "object",
+    "notation",
+    "luon",
+    "parser",
+    "lightweight"
+  ],
+  "author": {
+    "name": "Lars Mueller",
+    "email": "appgurulars@gmx.de",
+    "url": "https://appgurueu.github.io"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/appgurueu/luon/issues"
+  },
+  "engines": {
+    "node": ">= 6.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "dependencies": {},
+  "homepage": "https://github.com/appgurueu/luon"
+}
