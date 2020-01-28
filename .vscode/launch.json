@@ -24,6 +24,16 @@
             "skipFiles": [
                 "<node_internals>/**"
             ]
+        },
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Test & Debug Program",
+            "program": "${workspaceFolder}/test.js",
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
         }
         
     ]

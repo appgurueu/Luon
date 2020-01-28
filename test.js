@@ -1,9 +1,9 @@
 /* eslint-disable quotes */
 "use strict";
+const litest = require("litests");
 const luon = require("./index.js");
-const tester = require("./tester.js");
 
-new tester.BulkTester(luon).testEqualsAll([
+new litest.BulkTester(luon).testEqualsAll([
     "read",
     {
         "true": true,
@@ -20,6 +20,7 @@ new tester.BulkTester(luon).testEqualsAll([
         "[[string]]": "string",
         "[=[string]=]": "string",
         "'\\226\\130\\172'": "€",
+        "'\\xF0\\x90\\x8D\\x88'": "𐍈", // two character utf 16
         /* UTF-8 escape sequences to UTF-16 conversion */
         "{a=1}": {
             a: 1

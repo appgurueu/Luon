@@ -1,6 +1,6 @@
 {
   "name": "luon",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "esversion": 6,
   "description": "A lightweight Lua Object Notation (Luon) implementation",
   "main": "./index.js",
@@ -33,5 +33,8 @@
     "npm": ">= 3.0.0"
   },
   "dependencies": {},
+  "devDependencies": {
+    "litests": ">= 1.0.0"
+  },
   "homepage": "https://github.com/appgurueu/luon"
 }

@@ -15,7 +15,10 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 5da689c313, 2019-01-14"
-   sodipodi:docname="luon_banner.svg">
+   sodipodi:docname="luon_banner.svg"
+   inkscape:export-filename="/home/lars/Concepts/Node Packages/Luon/luon_banner.png"
+   inkscape:export-xdpi="65.505882"
+   inkscape:export-ydpi="65.505882">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -26,8 +29,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.20735318"
-     inkscape:cx="474.07778"
-     inkscape:cy="767.42046"
+     inkscape:cx="-2216.983"
+     inkscape:cy="728.83894"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -49,7 +52,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <cc:license
            rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
       </cc:Work>

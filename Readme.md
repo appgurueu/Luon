@@ -1,4 +1,4 @@
-![Luon Banner](luon_banner.svg)
+![Luon Banner](luon_banner.png)
 
 # Luon
 
@@ -195,6 +195,13 @@ Tables also have various notations - keys can be given in any order, but also li
 
 ## API
 
+### Installation
+
+Install the NPM package [`luon`](https://npmjs.com/package/luon):
+```bash
+npm install luon
+```
+
 The API **can read Lua 5.4** compatible Luon, but **writes Lua 5.1** compatible Luon.
 Methods may raise errors for invalid objects (for instance functions) or invalid Luon.
 
@@ -203,6 +210,16 @@ Methods may raise errors for invalid objects (for instance functions) or invalid
 ```javascript
 const luon=require("luon");
 ```
+
+### Versions
+
+* `v1.0.0`
+  * The initial release
+* `v1.0.1`
+  * Fixes UTF-8 sequence to UTF-16 conversion
+  * Fixes objects specifying a custom write function
+  * The testing framework `tester.js` has been separated as [`litest`](https://github.com/appgurueu/litest)
+  * Slightly improved documentation
 
 ### Streams
 
@@ -300,8 +317,10 @@ Things which can be specified:
 
 #### `writer.write(object, [output])`
 
-If output is given, writes to output. Else writes to rope which is then turned to string.
-Writes the given object using the given writer to Lua Object Notation. Returns string if no output given, else returns success.
+If output is given, writes to output. Else writes to a `StringBuilder`.
+Writes the given object using the given writer to Lua Object Notation. Returns string if no output given.
+Throws an `InputError` if objects can't be represented. You can override the `error` function to ignore it or handle it differently.
+If an object provides a `write_function`, the writer will call the function and leave the object writing to it. By default this function is called `writeLuon`.
 
 ### `luon.write(object, [out])`
 

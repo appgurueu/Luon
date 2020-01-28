@@ -279,8 +279,14 @@ function reader(config) {
         // U+0000 to U+D7FF or U+E000 to U+FFFF - only a single char needed
         if ((val >= 0 && val <= 0xD7FF) || (val >= 0xE000 && val <= 0xFFFF)) {
             return String.fromCharCode(val);
-        } else if (val > 0x10000) {
+        } else if (val >= 0x10000) {
+            // See https://en.wikipedia.org/wiki/UTF-16#Examples
             val -= 0x10000;
+            // high ten bits = high surrogate
+            let high_surrogate = (val / 0x400) + 0xD800;
+            // low ten bits = low surrogate, using and
+            let low_surrogate = (val % 0x400) + 0xDC00;
+            return String.fromCharCode(high_surrogate)+String.fromCharCode(low_surrogate);
         } else { // decoding problematic surrogates
             error("encoding_error", stream);
             // U+D800 to U+DFFF - only decodable if unpaired with each other
@@ -315,6 +321,7 @@ function reader(config) {
                     }
                     if (to_be_read === 0) {
                         rope.push(utf16(code, stream, rope.length > 0 ? rope[rope.length - 1].charCodeAt(0) : undefined));
+                        val=undefined;
                     }
                 } else {
                     if (val < 128) { // ASCII value, can be written
@@ -322,13 +329,13 @@ function reader(config) {
                     } else { // presumably UTF-8 starter sequence; if not, error
                         let highest_bit = 128;
                         for (to_be_read = -1; to_be_read < 4; to_be_read++) {
-                            val -= highest_bit;
-                            if (val <= 0) {
+                            if (highest_bit > val) {
                                 break;
                             }
+                            val -= highest_bit;
                             highest_bit /= 2;
                         }
-                        code = val + highest_bit;
+                        code = val;
                         if (to_be_read <= 0) {
                             error("severe_encoding_error", stream);
                         }
@@ -1367,8 +1374,9 @@ function writer(conf) {
                 let wfunc;
                 if (wfunc = object[write_function] && typeof (wfunc) === "function") {
                     wfunc(out);
+                } else {
+                    writeObject(object, out, 0);
                 }
-                writeObject(object, out, 0);
             } else {
                 error("unsupported_object", out, object);
             }
