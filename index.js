@@ -1,228 +1,40 @@
 /* eslint-disable quotes */
 /* eslint-disable no-cond-assign */
 "use strict";
+const lustils = require("lustils");
 
 /*
-
-UTILS
-
+Constant utilities
 */
 
 const c0 = "0".charCodeAt(0);
 const ca = "a".charCodeAt(0);
 const cA = "A".charCodeAt(0);
 
-function isDigit(x) {
-    return x >= "0" && x <= "9";
-}
+const {
+    isDigit,
+    isLetter,
+    isHexDigit
+} = lustils.parse;
 
-function isLetter(x) {
-    return (x >= "a" && x <= "z") || (x >= "A" && x <= "Z");
-}
+const {
+    SyntaxError,
+    InputError
+} = lustils.error;
 
-function isHexDigit(x) {
-    return isDigit(x) || (x >= "a" && x <= "f") || (x >= "A" && x <= "F");
-}
+const {
+    StringReader,
+    StringBuilder,
+    StreamLocator,
+    StringLengthCounter,
+    obtainInputStream,
+    obtainOutputStream,
+} = lustils.stream;
 
-class Error {
-    constructor(name, message) {
-        this.name = name;
-        this.message = message;
-    }
-    toString() {
-        return this.name + ": " + this.message;
-    }
-}
-
-class SyntaxError extends Error {
-    constructor(message) {
-        super("SyntaxError", message);
-    }
-}
-
-class InputError extends Error {
-    constructor(message) {
-        super("InputError", message);
-    }
-}
-
-class StringReader {
-    constructor(text) {
-        this.text = text;
-        this.cursor = 0;
-    }
-
-    read() {
-        return this.text.charAt(this.cursor++);
-    }
-}
-
-class BufferedReader {
-    constructor(input) {
-        this.buffer = new StringReader("");
-        this.input = input;
-    }
-
-    read() {
-        let c;
-        if (c = this.buffer.read()) {
-            return c;
-        }
-        this.buffer = new StringReader(this.input.read());
-        return this.read();
-    }
-}
-
-class StreamLocator {
-    constructor(stream) {
-        this.stream = stream;
-        this.row = 0;
-        this.col = 0;
-    }
-
-    read() {
-        let c = this.stream.read();
-        if (!c) {
-            return undefined;
-        }
-        if (c === "\n") {
-            this.row++;
-            this.col = 0;
-        } else {
-            this.col++;
-        }
-        return c;
-    }
-
-    skip(func) {
-        let c;
-        do {
-            c = this.read();
-        } while (c && func(c));
-        return c;
-    }
-
-    skipCounting(func) {
-        let count = 0;
-        let c;
-        do {
-            c = this.read();
-            count++;
-        } while (c && func(c));
-        return [count, c];
-    }
-}
-
-class StringBuilder {
-    constructor(text) {
-        this.text = text || "";
-    }
-    write(data) {
-        this.text += data;
-    }
-}
-
-class StringLengthCounter {
-    constructor() {
-        this.length = 0;
-    }
-    write(data) {
-        this.length += data.length;
-    }
-}
-
-function obtainInputStream(input) {
-    return new StreamLocator((typeof (input) === "string" && new StringReader(input)) || input);
-}
-
-function obtainOutputStream(output) {
-    return output || new StringBuilder();
-}
-
-function obtainStreams(input, output) {
-    return [obtainInputStream(input), obtainOutputStream(output)];
-}
-
-class State {
-    constructor() {
-        this.transitions = {};
-        this.any = {
-            state: this,
-            write: true
-        };
-    }
-
-    setAnyTransition(transition) {
-        this.any = transition;
-    }
-
-    consume(aut, c) {
-        return this.transitions[c] || this.any;
-    }
-
-    setTransition(character, transition) {
-        if (Array.isArray(character)) {
-            for (let c of character) {
-                this.setTransition(c, transition);
-            }
-        } else {
-            this.transitions[character] = transition;
-        }
-    }
-}
-
-class SpecialState extends State {
-    constructor() {
-        super();
-    }
-
-    setConsumer(consumer) {
-        this.consume = consumer;
-    }
-}
-
-// A slightly extended Mealy machine (extension: "special states", necessary for long notation)
-class AdvancedMealyMachine {
-    constructor(machine) {
-        if (machine) {
-            this.current_state = machine.current_state;
-        } else {
-            this.current_state = new State();
-        }
-        this.data = {
-            opening: 0,
-            closing: 0
-        };
-    }
-
-    consume(c, output) {
-        let transition = this.current_state.consume(this, c);
-        if (!transition.state) {
-            return;
-        }
-        this.current_state = transition.state;
-        if (transition.write) {
-            output.write(transition.write === true ? c : transition.write);
-        }
-    }
-
-    consumeStream(input, output) {
-        let c;
-        while ((c = input.read()) && typeof (c) === "string" && c !== "") {
-            this.consume(c, output);
-        }
-        this.consume("", output); // in order to write out the buffer
-    }
-
-    static applier(machine) {
-        return function (input, output) {
-            [input, output] = obtainStreams(input, output);
-            let machine_clone = new AdvancedMealyMachine(machine);
-            machine_clone.consumeStream(input, output);
-            return output;
-        };
-    }
-}
+const State = lustils.parse.MealyState;
+const SpecialState = lustils.parse.MealySpecialState;
+const MachineBase = lustils.parse.ExtendedMealyMachineBase;
+const Machine = lustils.parse.ExtendedMealyMachine;
 
 const complete_translations = {
     atom_expected: "atom expected",
@@ -265,9 +77,7 @@ function errorTranslator(translations) {
 const defaultErrorHandler = errorTranslator({});
 
 /*
-
-READER
-
+Reader
 */
 
 
@@ -744,13 +554,11 @@ function reader(config) {
 
 
 /*
-
-WRITER
-
+Writer
 */
 
-let comment_removal_machine = new AdvancedMealyMachine();
-let initial = comment_removal_machine.current_state;
+let comment_removal_machine = new MachineBase({opening: 0, closing: 0});
+let initial = comment_removal_machine.initial_state;
 
 /* Comment states */
 let comment_incoming = new State();
@@ -907,11 +715,11 @@ function buildTraps(initial) {
 
 buildTraps(initial)(comment);
 
-const removeComments = AdvancedMealyMachine.applier(comment_removal_machine);
+const removeComments = Machine.applier(comment_removal_machine);
 
-let space_removal_machine = new AdvancedMealyMachine();
+let space_removal_machine = new MachineBase({opening: 0, closing: 0});
 
-initial = space_removal_machine.current_state;
+initial = space_removal_machine.initial_state;
 initial.setAnyTransition({
     state: initial,
     write: true
@@ -924,7 +732,7 @@ initial.setTransition([" ", "\t", "\n"], {
 
 buildTraps(initial);
 
-const removeSpacing = AdvancedMealyMachine.applier(space_removal_machine);
+const removeSpacing = Machine.applier(space_removal_machine);
 
 function numberWriter(base, digit_func) {
     return (num, out, precision) => {
@@ -1398,9 +1206,6 @@ writers.beautify = writer(confs.beautify);
 Object.freeze(writers);
 
 let exps = {
-    StringReader,
-    BufferedReader,
-    StringBuilder,
     removeComments,
     removeSpacing,
     reader,

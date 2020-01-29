@@ -220,6 +220,9 @@ const luon=require("luon");
   * Fixes objects specifying a custom write function
   * The testing framework `tester.js` has been separated as [`litest`](https://github.com/appgurueu/litest)
   * Slightly improved documentation
+* `v1.1.0`
+  * Utilities have been moved to [`lustils`](https://github.com/appgurueu/lustils)
+    * API consequence: `StringReader`, `BufferedReader`, and `StringBuilder` not included anymore (access them via Lustils)
 
 ### Streams
 
@@ -228,10 +231,10 @@ Luon works with strings and stream objects:
 * `InputStream`: provides an `stream.read()` method to read a single character. **Luon expects `InputStream`s to be UTF-8.**
 * `OutputStream`: provides a `stream.write(text)` method to write a string
 
-For that purpose, it provides the following utility classes:
+For that purpose, the following utility classes provided by [`lustils`](https://github.com/appgurueu/lustils) may be used:
 
 * `StringReader(text)`: creates an `InputStream` from a string
-* `BufferedReader(text)`: creates an `InputStream` from an `InputStream` providing a `read()` method which returns chunks of data instead of single characters
+* `BufferedReader(chunked_input_stream)`: creates an `InputStream` from a `ChunkedInputStream` providing a `read()` method which returns chunks of data instead of single characters
 * `StringBuilder()`: creates an `OutputStream`
 
 Under the hood, strings are always wrapped using `StringReader` streams.

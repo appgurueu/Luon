@@ -1,6 +1,6 @@
 {
   "name": "luon",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "esversion": 6,
   "description": "A lightweight Lua Object Notation (Luon) implementation",
   "main": "./index.js",
@@ -32,7 +32,9 @@
     "node": ">= 6.0.0",
     "npm": ">= 3.0.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lustils": ">= 1.0.0"
+  },
   "devDependencies": {
     "litests": ">= 1.0.0"
   },
