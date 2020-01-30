@@ -223,6 +223,9 @@ const luon=require("luon");
 * `v1.1.0`
   * Utilities have been moved to [`lustils`](https://github.com/appgurueu/lustils)
     * API consequence: `StringReader`, `BufferedReader`, and `StringBuilder` not included anymore (access them via Lustils)
+* `v1.1.1`
+  * Specify & implement handling of `NaN` and +/-`Inf`
+  * Fix reading of tables containing list items
 
 ### Streams
 
@@ -276,7 +279,7 @@ Convert object from Lua Object Notation to a JavaScript object, as follows:
 
 * `nil` is converted to `undefined`
 * Booleans `true`/`false` are same
-* Numbers are converted to JS numbers (floats)
+* Numbers are converted to JS numbers (floats). `NaN`, `+Inf` and `-Inf` are converted to `nil`.
 * Strings are converted to JS strings
 * Tables, if they only have keys from 1-n, are converted to JS arrays
 * Tables, if they only have string keys, are converted to JS objects

@@ -438,7 +438,7 @@ function reader(config) {
                 c = isSpace(c) ? stream.skip(isSpace) : c;
             } else {
                 key_exists = false;
-                [value, c] = read(stream);
+                [value, c] = read(stream, c);
                 c = isSpace(c) ? stream.skip(isSpace) : c;
             }
             if (key_exists) {
@@ -1024,6 +1024,11 @@ function writer(conf) {
     } [number_format];
 
     function writeNumber(num, out) {
+        // NaN and Infinity map to "nil"
+        if (Number.isNaN(num) || !Number.isFinite(num)) {
+            out.write("nil");
+            return;
+        }
         if (Math.sign(num) < 0) {
             out.write("-");
         }

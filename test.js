@@ -21,7 +21,10 @@ new litest.BulkTester(luon).testEqualsAll([
         "[=[string]=]": "string",
         "'\\226\\130\\172'": "€",
         "'\\xF0\\x90\\x8D\\x88'": "𐍈", // two character utf 16
-        /* UTF-8 escape sequences to UTF-16 conversion */
+        "{a=1, b=2}": {
+            a: 1,
+            b: 2
+        },
         "{a=1}": {
             a: 1
         },
@@ -30,7 +33,8 @@ new litest.BulkTester(luon).testEqualsAll([
         },
         "{   much    =   'spacing'   }": {
             much: "spacing"
-        }
+        },
+        "{ 1 , 2 }": [1,2]
     },
     "readRemoveComments", {
         "10--comment": 10,
@@ -52,6 +56,9 @@ new litest.BulkTester(luon).testEqualsAll([
     },
     "writeText",
     [
+        NaN, "nil",
+        +Infinity, "nil",
+        -Infinity, "nil",
         [true, false, true, undefined], "{true,false,true,nil}",
         "test", '"test"',
         "test\nheh", '"test\\nheh"',
