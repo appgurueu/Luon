@@ -34,7 +34,7 @@ See [the Lua 5.1 manual](https://www.lua.org/manual/5.1/manual.html).
 
 The entire syntax (including semantic tokens) is notated in BNF as follows:
 
-Nonterminals: `<nonterminal>`, terminals: `"terminal"`, productions: `<a1> = <b1> + "b2" + ... | ...`
+Nonterminals: `<nonterminal>`, terminals: `"terminal"`, productions: `<a1> = <b1> + "b2" + ... | ...`, unicode character range (terminal): "start"-"end"
 
 ```bnf
 <boolean> = "true" | "false"
@@ -87,7 +87,8 @@ Nonterminals: `<nonterminal>`, terminals: `"terminal"`, productions: `<a1> = <b1
 <spaced_val> = <val> | val + <spaces>
 <value> = <spaced_val> | <spaces> + <spaced_val>
 
-<letter_or_underscore> = A-z | "_"
+<letter> = "A"-"Z" | "a"-"z"
+<letter_or_underscore> = <letter> | "_"
 <identifier> = <letter_or_underscore> | <identifier> + <letter_or_underscore> | <identifier> + <number>
 <table_key> = "[" + <value> + "]" | <identifier>
 <table_key_spaced> = <table_key> | <table_key> + <spaces>
@@ -226,6 +227,10 @@ const luon=require("luon");
 * `v1.1.1`
   * Specify & implement handling of `NaN` and +/-`Inf`
   * Fix reading of tables containing list items
+* `v1.1.2`
+  * Documentation improvements
+  * Moved `completeDict` to Lustils
+  * Allows having no `write_function`
 
 ### Streams
 

@@ -11,6 +11,8 @@ const c0 = "0".charCodeAt(0);
 const ca = "a".charCodeAt(0);
 const cA = "A".charCodeAt(0);
 
+const completeDict = lustils.object.complete;
+
 const {
     isDigit,
     isLetter,
@@ -54,18 +56,6 @@ const complete_translations = {
     no_value: "missing value",
     end_of_input_expected: "end of input expected",
 };
-
-function completeDict(incomplete, completions) {
-    let completed = {};
-    for (let key in completions) {
-        if (Object.prototype.hasOwnProperty.call(incomplete, key)) {
-            completed[key] = incomplete[key];
-        } else {
-            completed[key] = completions[key];
-        }
-    }
-    return completed;
-}
 
 function errorTranslator(translations) {
     translations = completeDict(translations, complete_translations);
@@ -1185,7 +1175,7 @@ function writer(conf) {
                 writeNumber(object, out);
             } else if (t === "object") {
                 let wfunc;
-                if (wfunc = object[write_function] && typeof (wfunc) === "function") {
+                if (write_function && (wfunc = object[write_function]) && typeof(wfunc) === "function") {
                     wfunc(out);
                 } else {
                     writeObject(object, out, 0);
