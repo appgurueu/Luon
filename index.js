@@ -728,10 +728,10 @@ function numberWriter(base, digit_func) {
     return (num, out, precision) => {
         let digits = [];
         let digit;
-        while (num > base) {
+        while (num >= base) {
             digit = Math.floor(num % base);
             digits.push(digit_func(digit));
-            num = Math.floor(num / base);
+            num /= base;
         }
         digits.reverse();
         for (digit of digits) {
@@ -742,9 +742,9 @@ function numberWriter(base, digit_func) {
         num %= 1;
         if (num !== 0 && precision > 0) {
             out.write(".");
-            for (; precision >= 0 && num !== 0; precision--) {
+            for (; precision >= 0 && num >= Math.pow(base, -precision); precision--) {
                 num *= base;
-                digit = Math.floor(num % 1);
+                digit = Math.floor(num % base);
                 out.write(digit_func(digit));
                 num -= digit;
             }

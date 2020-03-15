@@ -233,6 +233,8 @@ const luon=require("luon");
   * Allows having no `write_function`
 * `v1.1.3`
   * Fixes number serialization
+* `v1.1.4`
+  * Actually fixes number serialization
 
 ### Streams
 
