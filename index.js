@@ -726,11 +726,16 @@ const removeSpacing = Machine.applier(space_removal_machine);
 
 function numberWriter(base, digit_func) {
     return (num, out, precision) => {
+        let digits = [];
         let digit;
-        while (num >= base) {
-            digit = Math.floor(num / base);
-            out.write(digit_func(digit));
-            num %= base;
+        while (num > base) {
+            digit = Math.floor(num % base);
+            digits.push(digit_func(digit));
+            num = Math.floor(num / base);
+        }
+        digits.reverse();
+        for (digit of digits) {
+            out.write(digit);
         }
         digit = Math.floor(num);
         out.write(digit_func(digit));

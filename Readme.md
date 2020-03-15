@@ -231,6 +231,8 @@ const luon=require("luon");
   * Documentation improvements
   * Moved `completeDict` to Lustils
   * Allows having no `write_function`
+* `v1.1.3`
+  * Fixes number serialization
 
 ### Streams
 

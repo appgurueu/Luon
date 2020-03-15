@@ -9,6 +9,7 @@ new litest.BulkTester(luon).testEqualsAll([
         "true": true,
         "false": false,
         "nil": undefined,
+        "12345": 12345,
         "1": 1,
         "-1": -1,
         "0xFF": 255,
