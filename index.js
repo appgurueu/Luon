@@ -86,7 +86,7 @@ function reader(config) {
             let high_surrogate = (val / 0x400) + 0xD800;
             // low ten bits = low surrogate, using and
             let low_surrogate = (val % 0x400) + 0xDC00;
-            return String.fromCharCode(high_surrogate)+String.fromCharCode(low_surrogate);
+            return String.fromCharCode(high_surrogate) + String.fromCharCode(low_surrogate);
         } else { // decoding problematic surrogates
             error("encoding_error", stream);
             // U+D800 to U+DFFF - only decodable if unpaired with each other
@@ -121,7 +121,7 @@ function reader(config) {
                     }
                     if (to_be_read === 0) {
                         rope.push(utf16(code, stream, rope.length > 0 ? rope[rope.length - 1].charCodeAt(0) : undefined));
-                        val=undefined;
+                        val = undefined;
                     }
                 } else {
                     if (val < 128) { // ASCII value, can be written
@@ -278,7 +278,7 @@ function reader(config) {
             }
             additional = value_fnc(c);
             if (additional < 0 || additional >= base) {
-                break; //return [value, c];
+                break;
             }
             value *= base;
             value += additional;
@@ -547,7 +547,10 @@ function reader(config) {
 Writer
 */
 
-let comment_removal_machine = new MachineBase({opening: 0, closing: 0});
+let comment_removal_machine = new MachineBase({
+    opening: 0,
+    closing: 0
+});
 let initial = comment_removal_machine.initial_state;
 
 /* Comment states */
@@ -707,7 +710,10 @@ buildTraps(initial)(comment);
 
 const removeComments = Machine.applier(comment_removal_machine);
 
-let space_removal_machine = new MachineBase({opening: 0, closing: 0});
+let space_removal_machine = new MachineBase({
+    opening: 0,
+    closing: 0
+});
 
 initial = space_removal_machine.initial_state;
 initial.setAnyTransition({
@@ -724,37 +730,54 @@ buildTraps(initial);
 
 const removeSpacing = Machine.applier(space_removal_machine);
 
-function numberWriter(base, digit_func) {
+function numberWriter(base, digit_func, compress, prefix) {
     return (num, out, precision) => {
+        let after_comma = num % 1;
+        const omit_zero = compress && after_comma !== 0 && num === after_comma;
+        if (prefix) {
+            out.write(prefix);
+        }
         let digits = [];
         let digit;
-        while (num >= base) {
+        while (num > 0) {
             digit = Math.floor(num % base);
             digits.push(digit_func(digit));
-            num /= base;
+            num = Math.floor(num / base);
         }
         digits.reverse();
-        for (digit of digits) {
-            out.write(digit);
-        }
         digit = Math.floor(num);
-        out.write(digit_func(digit));
-        num %= 1;
-        if (num !== 0 && precision > 0) {
+        if (!compress || !omit_zero) {
+            for (digit of digits) {
+                out.write(digit);
+            }
+        }
+        if (after_comma !== 0 && precision > 0) {
             out.write(".");
-            for (; precision >= 0 && num >= Math.pow(base, -precision); precision--) {
-                num *= base;
-                digit = Math.floor(num % base);
+            for (; precision >= 0 && after_comma >= Math.pow(base, -precision); precision--) {
+                after_comma *= base;
+                digit = Math.floor(after_comma % base);
                 out.write(digit_func(digit));
-                num -= digit;
+                after_comma -= digit;
             }
         }
     };
 }
 
-const writeDecimal = numberWriter(10, digit => String.fromCharCode(c0 + digit));
-const writeHex = numberWriter(16, digit => String.fromCharCode(digit <= 10 ? c0 + digit : ca + digit));
-const writeHEX = numberWriter(16, digit => String.fromCharCode(digit <= 10 ? c0 + digit : cA + digit));
+const decimalDigit = digit => String.fromCharCode(c0 + digit);
+const writeDecimal = numberWriter(10, decimalDigit);
+const writeDecimalCompressed = numberWriter(10, decimalDigit, true);
+let hexWriters = {};
+for (let capitalization of [ca, cA]) {
+    for (let compress of [true, false]) {
+        hexWriters["writeH" + (capitalization == ca ? "ex" : "EX") + (compress ? "Compressed" : "")] = numberWriter(16, digit => String.fromCharCode(digit < 10 ? (c0 + digit) : (capitalization + digit - 10)), compress, "0x");
+    }
+}
+// no use for writeHEXCompressed at the moment
+const {
+    writeHex,
+    writeHEX,
+    writeHexCompressed
+} = hexWriters;
 
 function decimalEscape(char_code) {
     let escape = String.fromCharCode(char_code % 10 + c0);
@@ -981,15 +1004,16 @@ function writer(conf) {
         write_function
     } = conf;
 
-    function expNotation(zeros) {
+    function expNotation(zeros, compress) {
+        const numberWriter = compress ? writeDecimalCompressed : writeDecimal;
         return function (num, out, precision) {
             let exp = Math.floor(Math.log10(num));
-            if (Math.abs(exp) < zeros) {
-                writeDecimal(num, out, precision);
+            if (!exp || Math.abs(exp) < zeros) {
+                numberWriter(num, out, precision);
                 return;
             }
             let mant = num / Math.pow(10, exp);
-            writeDecimal(mant, out, precision);
+            numberWriter(mant, out, precision);
             out.write("e");
             writeDecimal(exp, out, 0);
         };
@@ -1014,7 +1038,7 @@ function writer(conf) {
         "HEX": writeHEX,
         "dec": writeDecimal,
         "scientific": expNotation(1),
-        "compress": compressNum([writeHex, writeDecimal, expNotation(1)]),
+        "compress": compressNum([writeHexCompressed, writeDecimalCompressed, expNotation(1, true)]),
         "beautify": expNotation(3)
     } [number_format];
 
@@ -1026,6 +1050,7 @@ function writer(conf) {
         }
         if (Math.sign(num) < 0) {
             out.write("-");
+            num = -num;
         }
         num_format(num, out, number_precision);
     }
@@ -1180,7 +1205,7 @@ function writer(conf) {
                 writeNumber(object, out);
             } else if (t === "object") {
                 let wfunc;
-                if (write_function && (wfunc = object[write_function]) && typeof(wfunc) === "function") {
+                if (write_function && (wfunc = object[write_function]) && typeof (wfunc) === "function") {
                     wfunc(out);
                 } else {
                     writeObject(object, out, 0);
@@ -1210,7 +1235,9 @@ let exps = {
     removeSpacing,
     reader,
     read: reader().read,
-    readRemoveComments: reader({remove_comments: true}).read,
+    readRemoveComments: reader({
+        remove_comments: true
+    }).read,
     writer,
     write: writer().write,
     writeCompressed: writer("compress").write,

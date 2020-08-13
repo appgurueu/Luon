@@ -237,6 +237,8 @@ const luon=require("luon");
   * Actually fixes number serialization
 * `v1.1.6`
   * Fixes string serialization of `"a"`
+  * Fixes number serialization
+  * Fixes compressed writer always choosing hex notation for numbers & not shortening decimals by omitting a leading zero (`0.x` to `.x`)
 
 ### Streams
 
