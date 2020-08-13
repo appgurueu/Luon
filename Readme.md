@@ -1,4 +1,4 @@
-![Luon Banner](luon_banner.png)
+![Image](banner.png)
 
 # Luon
 
@@ -235,6 +235,8 @@ const luon=require("luon");
   * Fixes number serialization
 * `v1.1.4`
   * Actually fixes number serialization
+* `v1.1.6`
+  * Fixes string serialization of `"a"`
 
 ### Streams
 

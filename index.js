@@ -848,7 +848,7 @@ function longMinIdentifier(text) {
 
 const basic_escapes = {
     // eslint-disable-next-line no-useless-escape
-    "\a": "a",
+    "\u0007": "a",
     "\b": "b",
     "\f": "f",
     "\n": "n",
@@ -859,14 +859,14 @@ const basic_escapes = {
 };
 
 let single_quote_escapes = {
-    ...basic_escapes
+    ...basic_escapes,
+    "'": "'"
 };
-single_quote_escapes["'"] = "'";
 
 let double_quote_escapes = {
-    ...basic_escapes
+    ...basic_escapes,
+    '"': '"'
 };
-double_quote_escapes['"'] = '"';
 
 let unescapes = {
     "\n": "\n"
