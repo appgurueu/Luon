@@ -64,6 +64,8 @@ new litest.BulkTester(luon).testEqualsAll([
         "test", '"test"',
         "test\nheh", '"test\\nheh"',
         "\x20", '"\x20"',
+        "a", '"a"',
+        "\u0007", '"\\a"',
         "€", '"€"',
         123456, "1.23456e5",
         101, "1.01e2",
@@ -71,7 +73,8 @@ new litest.BulkTester(luon).testEqualsAll([
     ],
     "writeCompressedText",
     [
-        "test'test", '"test\'test"'
+        "test'test", '"test\'test"',
+        1000000, "1e6"
     ],
     "writeBeautifiedText",
     [

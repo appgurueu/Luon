@@ -1002,7 +1002,7 @@ function writer(conf) {
             for (let i = 1; i < funcs.length; i++) {
                 let sb = new StringBuilder();
                 funcs[i](num, sb, precision);
-                if (sb.length < best.length) {
+                if (sb.text.length < best.text.length) {
                     best = sb;
                 }
             }
