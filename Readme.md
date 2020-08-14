@@ -209,7 +209,7 @@ Methods may raise errors for invalid objects (for instance functions) or invalid
 ### Import
 
 ```javascript
-const luon=require("luon");
+const luon = require("luon");
 ```
 
 ### Versions
