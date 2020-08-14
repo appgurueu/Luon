@@ -315,7 +315,7 @@ const writer = luon.writer(); // writer with default config
 const default = luon.writer("default"); // same as above, writer === default
 const compress = luon.writer("compress"); // compresses resulting Luon to be as small as possible (in bytes)
 const pretty = luon.writer("pretty"); // pretty writer, attempts human readable notation (indentation etc)
-const custom = luon.writer("custom", {number_format: "hex"}); // custom writer, forces numbers to be hex
+const custom = luon.writer({number_format: "hex"}); // custom writer, forces numbers to be hex
 ```
 
 ##### `compress`
