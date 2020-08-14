@@ -239,6 +239,8 @@ const luon = require("luon");
   * Fixes string serialization of `"a"`
   * Fixes number serialization
   * Fixes compressed writer always choosing hex notation for numbers & not shortening decimals by omitting a leading zero (`0.x` to `.x`)
+* `v1.1.7`
+  * Bumps `lustils` dependency (required fix)
 
 ### Streams
 
