@@ -1092,6 +1092,7 @@ function writer(conf) {
         "double": writeDoubleQuoted,
         "single": writeSingleQuoted,
         "long": writeMinimalLongNotation(false),
+        "long_newline": writeMinimalLongNotation(true),
         "compress": writeCompressedText(false),
         "beautify": writeCompressedText(true)
     } [string_format];

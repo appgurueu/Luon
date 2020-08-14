@@ -241,6 +241,8 @@ const luon = require("luon");
   * Fixes compressed writer always choosing hex notation for numbers & not shortening decimals by omitting a leading zero (`0.x` to `.x`)
 * `v1.1.7`
   * Bumps `lustils` dependency (required fix)
+* `v1.2.0`
+  * Allows `string_format = "long_newline"`
 
 ### Streams
 
@@ -328,13 +330,17 @@ Always uses the representation of an object taking the least space. Involves hex
 
 Neatly format an object to make it as easily recognizable as possible. Involves additional whitespaces, indentation and the like.
 
-##### `custom`
+##### Custom
 
 Things which can be specified:
-* `number`: How numbers are formatted (hex/mantisse/exp)
-* `string`: How strings are formatted (single/double/long)
-* `table`: Table options, comma & colon formatting, line breaking rules, indentation
-* `remove_comments`: Boolean
+
+* `indent`: String to indent with (`"\t"` for example)
+* `linebreaks`: Whether to use linebreaks for tables
+* `number_precision`: 10
+* `number_format`: How numbers are formatted (hex/mantisse/exp)
+* `string_format`: How strings are formatted (single/double/long[_newline])
+* `error`: `function (error_type, out, object)`
+* `write_function`: Name of function to be provided by objects with custom serialization
 
 #### `writer.write(object, [output])`
 
