@@ -243,7 +243,7 @@ const luon = require("luon");
   * Bumps `lustils` dependency (required fix)
 * `v1.2.0`
   * Allows `string_format = "long_newline"`
-* `v1.2.1`, `v1.2.2`
+* `v1.2.1-3`
   * Number serialization fixes
 
 ### Streams

@@ -732,7 +732,7 @@ const removeSpacing = Machine.applier(space_removal_machine);
 
 function numberWriter(base, digit_func, compress, prefix) {
     return (num, out, precision) => {
-        if (Math.sign(num) < 0 < 0) {
+        if (Math.sign(num) < 0) {
             out.write("-");
             num = -num;
         }
@@ -755,7 +755,7 @@ function numberWriter(base, digit_func, compress, prefix) {
                 out.write(digit);
             }
         }
-        if (after_comma !== 0 && precision > 0) {
+        if (after_comma !== 0 && precision > 0 && after_comma >= Math.pow(base, -precision)) {
             out.write(".");
             for (; precision >= 0 && after_comma >= Math.pow(base, -precision); precision--) {
                 after_comma *= base;
