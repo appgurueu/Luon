@@ -739,11 +739,11 @@ function numberWriter(base, digit_func, compress, prefix) {
         }
         let digits = [];
         let digit;
-        while (num > 0) {
+        do {
             digit = Math.floor(num % base);
             digits.push(digit_func(digit));
             num = Math.floor(num / base);
-        }
+        } while (num > 0);
         digits.reverse();
         digit = Math.floor(num);
         if (!compress || !omit_zero) {
@@ -1008,7 +1008,7 @@ function writer(conf) {
         const numberWriter = compress ? writeDecimalCompressed : writeDecimal;
         return function (num, out, precision) {
             let exp = Math.floor(Math.log10(num));
-            if (!exp || Math.abs(exp) < zeros) {
+            if (!Number.isFinite(exp) || Math.abs(exp) < zeros) {
                 numberWriter(num, out, precision);
                 return;
             }
@@ -1044,7 +1044,7 @@ function writer(conf) {
 
     function writeNumber(num, out) {
         // NaN and Infinity map to "nil"
-        if (Number.isNaN(num) || !Number.isFinite(num)) {
+        if (!Number.isFinite(num)) {
             out.write("nil");
             return;
         }
