@@ -245,6 +245,8 @@ const luon = require("luon");
   * Allows `string_format = "long_newline"`
 * `v1.2.1-3`
   * Number serialization fixes
+* `v1.2.4`
+  * Long string deserialization fixes
 
 ### Streams
 

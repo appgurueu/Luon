@@ -35,7 +35,8 @@ new litest.BulkTester(luon).testEqualsAll([
         "{   much    =   'spacing'   }": {
             much: "spacing"
         },
-        "{ 1 , 2 }": [1,2]
+        "{ 1 , 2 }": [1,2],
+        "[[_[_]\n_[_]\n_[_]\n_[]\n]]": "_[_]\n_[_]\n_[_]\n_[]\n"
     },
     "readRemoveComments", {
         "10--comment": 10,

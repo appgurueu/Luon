@@ -365,18 +365,7 @@ function reader(config) {
             n = 2;
         let newline = 0;
         while ((c = stream.read()) !== undefined) {
-            if (c === "\r") {
-                if (newline !== n) {
-                    newline = r;
-                }
-            } else if (c === "\n") {
-                text += c;
-                if (newline === r) {
-                    newline = 0;
-                } else {
-                    newline = n;
-                }
-            } else if (c === "]") {
+            if (c === "]") {
                 if (closing_count === opening_count) {
                     return text;
                 }
@@ -386,12 +375,25 @@ function reader(config) {
                 closing_count++;
             } else {
                 restore_content();
-                if (newline === r) {
-                    text += "\r";
-                }
-                newline = 0;
                 closing_count = -1;
-                text += c;
+                if (c === "\r") {
+                    if (newline !== n) {
+                        newline = r;
+                    }
+                } else if (c === "\n") {
+                    text += c;
+                    if (newline === r) {
+                        newline = 0;
+                    } else {
+                        newline = n;
+                    }
+                } else {
+                    if (newline === r) {
+                        text += "\r";
+                    }
+                    newline = 0;
+                    text += c;
+                }
             }
         }
         error("unclosed_long_notation", stream);
