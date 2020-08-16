@@ -732,6 +732,10 @@ const removeSpacing = Machine.applier(space_removal_machine);
 
 function numberWriter(base, digit_func, compress, prefix) {
     return (num, out, precision) => {
+        if (Math.sign(num) < 0 < 0) {
+            out.write("-");
+            num = -num;
+        }
         let after_comma = num % 1;
         const omit_zero = compress && after_comma !== 0 && num === after_comma;
         if (prefix) {
@@ -1047,10 +1051,6 @@ function writer(conf) {
         if (!Number.isFinite(num)) {
             out.write("nil");
             return;
-        }
-        if (Math.sign(num) < 0) {
-            out.write("-");
-            num = -num;
         }
         num_format(num, out, number_precision);
     }
