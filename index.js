@@ -847,21 +847,28 @@ function escapeText(escape_func) {
 }
 
 function longMinIdentifier(text) {
-    let used = {};
+    let used = new Set();
     let min_level = 0;
+    const useLevel = level => {
+        if (used.has(level))
+            return;
+        used.add(level);
+        while (used.has(min_level))
+            min_level++;
+    };
     for (let i = 0; i < text.length; i++) {
         let c = text.charAt(i);
-        if (c == "]") {
-            let lev = i;
-            while (text.charAt(lev) == "=") {
-                lev++;
+        if (c === "]") {
+            let level = i + 1;
+            while (level < text.length && text.charAt(level) === "=") {
+                level++;
             }
-            if (text.charAt(lev) == c) {
-                lev -= i;
-                used[lev] = true;
-                while (used[min_level]) {
-                    min_level++;
-                }
+            const atEnd = i === text.length - 1;
+            if (text.charAt(level) === "]" || atEnd) {
+                level -= 1;
+                useLevel(level - i);
+                if (!atEnd)
+                    i = level;
             }
         }
     }
