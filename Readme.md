@@ -1,4 +1,4 @@
-![Image](banner.png)
+![Image](assets/banner.png)
 
 # Luon
 
@@ -249,6 +249,8 @@ const luon = require("luon");
   * Long string deserialization fixes
 * `v1.2.5`
   * Long string serialization fixes
+* `v1.2.6`
+  * Added assets to `.npmignore`
 
 ### Streams
 
