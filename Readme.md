@@ -251,6 +251,10 @@ const luon = require("luon");
   * Long string serialization fixes
 * `v1.2.6`
   * Added assets to `.npmignore`
+* `v1.2.7`
+  * Number serialization: Proper rounding
+* `v1.2.8`
+  * Number serialization performance
 
 ### Streams
 

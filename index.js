@@ -727,6 +727,7 @@ function numberWriter(base, digit_func, compress, prefix) {
 			out.write("-")
 			num = -num
 		}
+		num += Math.pow(base, -precision) / 2
 		let after_comma = num % 1
 		const omit_zero = compress && after_comma !== 0 && num === after_comma
 		if (prefix) {

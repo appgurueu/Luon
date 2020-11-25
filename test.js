@@ -101,6 +101,8 @@ new litest.BulkTester(luon).testEqualsAll([
 		"0",
 		0.001,
 		"1e-3",
+		0.69,
+		"0.69",
 		"\n".repeat(10) + "]==]",
 		"[=[\n" + "\n".repeat(10) + "]==]]=]",
 		"\n".repeat(10) + "]==",
