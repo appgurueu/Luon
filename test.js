@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint-disable quotes */
 "use strict"
 const litest = require("litests")
