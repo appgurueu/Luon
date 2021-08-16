@@ -930,7 +930,7 @@ function shortKeyNotation(key) {
 	}
 	for (let i = 1; i <= key.length; i++) {
 		let c = key.charAt(i)
-		if (!alphaOrUnder(c) && c < "0" && c > "9") {
+		if (!alphaOrUnder(c) && (c < "0" || c > "9")) {
 			return false
 		}
 	}
