@@ -152,11 +152,11 @@ Tables can store basically any information. They are like JS arrays *and* lists.
 
 At heart, you can think of tables as key - value storages.
 
-Usually, tables have a "list part" (as I use to call it), consisting of all number keys from `1` to `n`, where there is no key inbetween (Lua indices are one-based). This part can be traversed in order.
+Usually, tables have a "list part" (as I use to call it), consisting of all number keys from `1` to `n`, where there is no key in between (Lua indices are one-based). This part can be traversed in order.
 
-The other part is something that is comparable to JS dictionaires: A key-value lookup with no specific order. The only difference to JS is that, while rarely used in development, also non-string table keys are allowed in this "dictionairy."
+The other part is something that is comparable to JS dictionaries: A key-value lookup with no specific order. The only difference to JS is that, while rarely used in development, also non-string table keys are allowed in this "dictionary."
 
-Just like JS objects, tables are surrounded by curly brackets (`{` and `}`). All entries - either key-value assignments or elements to be appended to the "list part" - are separated with commata (`,`), with a trailing one being allowed.
+Just like JS objects, tables are surrounded by curly brackets (`{` and `}`). All entries - either key-value assignments or elements to be appended to the "list part" - are separated with commas (`,`), with a trailing one being allowed.
 
 Key-value assignments are written as `[key]=value`, with a possible shorthand being `key=value` if `key` is a string consisting only out of alphanumeric characters or underscores and doesn't start with a number.
 
@@ -190,7 +190,7 @@ special feature
 ### Ambiguity
 
 There are, obviously, different ways to represent the same objects.
-All atoms (`true`, `false`, `nil`) are unambiguos. Numbers can be written in decimal notation (with varying exponents) or as hex.
+All atoms (`true`, `false`, `nil`) are unambiguous. Numbers can be written in decimal notation (with varying exponents) or as hex.
 Strings have 3 different notations (single quotes, double quotes, long notation), and there are different ways of escaping.
 Tables also have various notations - keys can be given in any order, but also list notation can be used.
 
