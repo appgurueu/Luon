@@ -71,7 +71,7 @@ new litest.BulkTester(luon).testEqualsAll([
 		{a:1,b:2},
 		"{a=1,b=2}",
 		{'':1,'x-y':2,'x_y':3,'λ':5},
-		"{[\"\"]=1,[\"x-y\"]=2,x_y:3,[\"λ\"]:5}",
+		"{[\"\"]=1,[\"x-y\"]=2,x_y=3,[\"λ\"]=5}",
 		"test",
 		'"test"',
 		"test\nheh",

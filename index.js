@@ -913,24 +913,8 @@ function writeDoubleQuoted(text, out) {
 	out.write('"')
 }
 
-function alphaOrUnder(c) {
-	return (c >= "a" && c <= "z") || (c >= "A" && c <= "Z") || c == "_"
-}
-
 function shortKeyNotation(key) {
-	if (key === "") {
-		return false
-	}
-	if (!alphaOrUnder(key.charAt(0))) {
-		return false
-	}
-	for (let i = 1; i <= key.length; i++) {
-		let c = key.charAt(i)
-		if (!alphaOrUnder(c) && (c < "0" || c > "9")) {
-			return false
-		}
-	}
-	return true
+	return /^[a-zA-Z_]\w*$/.test(key)
 }
 
 function writeLongIdentifier(output, opening, identifier) {

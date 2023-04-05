@@ -1,6 +1,6 @@
 {
   "name": "luon",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "esversion": 6,
   "description": "A lightweight Lua Object Notation (Luon) implementation",
   "main": "./index.js",
