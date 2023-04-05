@@ -777,11 +777,7 @@ for (let capitalization of [ca, cA]) {
 const { writeHex, writeHEX, writeHexCompressed } = hexWriters
 
 function decimalEscape(char_code) {
-	let escape = String.fromCharCode((char_code % 10) + c0)
-	while ((char_code = Math.floor(char_code / 10)) >= 0) {
-		escape = String.fromCharCode((char_code % 10) + c0) + escape
-	}
-	return escape
+	return char_code.toString() // guaranteed to format integers in base 10
 }
 
 function defaultIsSafe(code) {
